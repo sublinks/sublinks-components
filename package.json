@@ -23,8 +23,5 @@
     "dist"
   ],
   "types": "dist/index.d.ts",
-  "repository": "https://github.com/sublinks/sublinks-components.git",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  }
+  "repository": "https://github.com/sublinks/sublinks-components.git"
 }
