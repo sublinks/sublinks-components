@@ -1,18 +1,34 @@
 import React, { ReactNode } from "react";
 import chroma from "chroma-js";
+import { DEFAULT_COLOR } from "../../shared/constants";
+import { Radius, getBorderRadiusPixels } from "../../shared/radius";
+import { TextSize, getTextSize } from "../../shared/text-size";
 
-interface ButtonProps {
+export interface ButtonProps {
   children?: ReactNode;
   startContent?: ReactNode;
   endContent?: ReactNode;
   color?: string;
-  size?: "small" | "medium" | "large";
-  radius?: "none" | "small" | "medium" | "large" | "full";
+  size?: TextSize;
+  radius?: Radius;
   variant?: "solid" | "outline" | "text";
   style?: React.CSSProperties;
+  isIcon?: boolean;
+  onClick?: () => void;
 }
 
-function getPaddingPixels(size: ButtonProps["size"]) {
+function getPaddingPixels(size: ButtonProps["size"], isIcon: ButtonProps["isIcon"]) {
+  if (isIcon) {
+    switch (size) {
+      case "small":
+        return "8px";
+      case "large":
+        return "16px";
+      default:
+        return "12px";
+    }
+  }
+
   switch (size) {
     case "small":
       return "8px 16px";
@@ -23,33 +39,11 @@ function getPaddingPixels(size: ButtonProps["size"]) {
   }
 }
 
-function getBorderRadiusPixels(radius: ButtonProps["radius"]) {
-  switch (radius) {
-    case "none":
-      return "0";
-    case "small":
-      return "4px";
-    case "large":
-      return "12px";
-    case "full":
-      return "9999px";
-    default:
-      return "8px";
-  }
-}
-
-/*
-Text button has a transparent background but gets a light background on hover. Gets text color set to color
-Outline button has a transparent background and has a border but gets a light background on hover and a lighter border. Gets text color and border color set to color
-Solid button has a light background and gets a darker background on hover. Gets background color set to color and text color set to transparent
-The hover color gets closer to the passed in color
-*/
-
 function getButtonBackground(
   variant: ButtonProps["variant"],
-  color: ButtonProps["color"]
+  color: ButtonProps["color"],
 ) {
-  const adjustedColor = color || "#adadad";
+  const adjustedColor = color || DEFAULT_COLOR;
 
   switch (variant) {
     case "text":
@@ -61,11 +55,11 @@ function getButtonBackground(
   }
 }
 
-function getButtonColor(
+function getTextColor(
   variant: ButtonProps["variant"],
   color: ButtonProps["color"]
 ) {
-  const adjustedColor = color || "#adadad";
+  const adjustedColor = color || DEFAULT_COLOR;
 
   switch (variant) {
     case "text":
@@ -73,7 +67,7 @@ function getButtonColor(
     case "outline":
       return adjustedColor;
     default:
-      return "transparent";
+      return chroma.contrast(adjustedColor, "white") > 4.5 ? "white" : "black";
   }
 }
 
@@ -81,11 +75,11 @@ function getButtonBorder(
   variant: ButtonProps["variant"],
   color: ButtonProps["color"]
 ) {
-  const adjustedColor = color || "#adadad";
+  const adjustedColor = color || DEFAULT_COLOR;
 
   switch (variant) {
     case "outline":
-      return `1px solid ${adjustedColor}`;
+      return `1px solid ${chroma(adjustedColor).darken().css()}`;
     default:
       return "none";
   }
@@ -93,15 +87,15 @@ function getButtonBorder(
 
 function getButtonHoverBackground(
   variant: ButtonProps["variant"],
-  color: ButtonProps["color"]
+  color: ButtonProps["color"],
 ) {
-  const adjustedColor = color || "#adadad";
+  const adjustedColor = color || DEFAULT_COLOR;
 
   switch (variant) {
     case "text":
-      return chroma(adjustedColor).alpha(0.05).css();
+      return chroma(adjustedColor).alpha(0.2).css();
     case "outline":
-      return chroma(adjustedColor).alpha(0.05).css();
+      return chroma(adjustedColor).alpha(0.2).css();
     default:
       return chroma(adjustedColor).darken().css();
   }
@@ -111,15 +105,15 @@ function getButtonHoverColor(
   variant: ButtonProps["variant"],
   color: ButtonProps["color"]
 ) {
-  const adjustedColor = color || "#adadad";
+  const adjustedColor = color || DEFAULT_COLOR;
 
   switch (variant) {
     case "text":
       return adjustedColor;
     case "outline":
-      return chroma(adjustedColor).darken().css();
+      return adjustedColor;
     default:
-      return "transparent";
+      return "white";
   }
 }
 
@@ -127,11 +121,11 @@ function getButtonHoverBorder(
   variant: ButtonProps["variant"],
   color: ButtonProps["color"]
 ) {
-  const adjustedColor = color || "#adadad";
+  const adjustedColor = color || DEFAULT_COLOR;
 
   switch (variant) {
     case "outline":
-      return `1px solid ${chroma(adjustedColor).brighten().css()}`;
+      return `1px solid ${chroma(adjustedColor).css()}`;
     default:
       return "none";
   }
@@ -141,38 +135,54 @@ const Button = ({
   children,
   startContent,
   endContent,
-  color = "adadad",
+  color = DEFAULT_COLOR,
   size = "medium",
   radius = "medium",
   variant = "solid",
+  isIcon = false,
+  onClick = () => {},
   style,
 }: ButtonProps) => {
   return (
     <button
+      onClick={onClick}
       style={{
-        padding: getPaddingPixels(size),
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "8px",
+        padding: getPaddingPixels(size, isIcon),
         borderRadius: getBorderRadiusPixels(radius),
         background: getButtonBackground(variant, color),
-        color: getButtonColor(variant, color),
+        color: getTextColor(variant, color),
         border: getButtonBorder(variant, color),
-        transition: "background-color 0.2s, color 0.2s, border-color 0.2s",
+        fontSize: getTextSize(size),
+        cursor: "default",
+        transition: "background 0.2s, background-color 0.2s, color 0.2s, border-color 0.2s, font-size 0.2s, transform 0.2s",
         ...style,
+      }}
+      onMouseDown={(e) => {
+        e.currentTarget.style.transform = "scale(0.97)";
+      }}
+      onMouseUp={(e) => {
+        e.currentTarget.style.transform = "scale(1)";
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.background = getButtonHoverBackground(
           variant,
-          color
+          color,
         );
         e.currentTarget.style.color = getButtonHoverColor(variant, color);
-        e.currentTarget.style.borderColor = getButtonHoverBorder(
+        e.currentTarget.style.border = getButtonHoverBorder(
           variant,
           color
         );
+        e.currentTarget.style.cursor = "pointer";
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.background = getButtonBackground(variant, color);
-        e.currentTarget.style.color = getButtonColor(variant, color);
-        e.currentTarget.style.borderColor = getButtonBorder(variant, color);
+        e.currentTarget.style.color = getTextColor(variant, color);
+        e.currentTarget.style.border = getButtonBorder(variant, color);
+        e.currentTarget.style.cursor = "default"
       }}
     >
       {startContent}

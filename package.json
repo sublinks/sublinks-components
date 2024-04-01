@@ -3,7 +3,9 @@
   "version": "0.0.2",
   "scripts": {
     "rollup": "rollup -c",
-    "test": "jest"
+    "test": "jest",
+    "storybook": "storybook dev -p 6007 --disable-telemetry",
+    "build-storybook": "storybook build"
   },
   "author": "Benjamin Barbeau",
   "license": "MIT",
@@ -12,9 +14,21 @@
     "@babel/preset-env": "^7.24.3",
     "@babel/preset-react": "^7.24.1",
     "@babel/preset-typescript": "^7.24.1",
+    "@chromatic-com/storybook": "^1.2.25",
+    "@heroicons/react": "^2.1.3",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
+    "@storybook/addon-a11y": "^8.0.5",
+    "@storybook/addon-essentials": "^8.0.5",
+    "@storybook/addon-interactions": "^8.0.5",
+    "@storybook/addon-links": "^8.0.5",
+    "@storybook/addon-onboarding": "^8.0.5",
+    "@storybook/addon-webpack5-compiler-swc": "^1.0.2",
+    "@storybook/blocks": "^8.0.5",
+    "@storybook/react": "^8.0.5",
+    "@storybook/react-webpack5": "^8.0.5",
+    "@storybook/test": "^8.0.5",
     "@testing-library/react": "^14.2.2",
     "@types/chroma-js": "^2.4.4",
     "@types/jest": "^29.5.12",
@@ -25,6 +39,7 @@
     "react": "^18.2.0",
     "rollup": "^4.13.2",
     "rollup-plugin-dts": "^6.1.0",
+    "storybook": "^8.0.5",
     "typescript": "^5.4.3"
   },
   "main": "dist/cjs/index.js",
@@ -36,5 +51,8 @@
   "repository": "https://github.com/sublinks/sublinks-components.git",
   "dependencies": {
     "chroma-js": "^2.4.2"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
   }
 }
