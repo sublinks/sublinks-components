@@ -76,6 +76,26 @@ export const TextColor: Story = {
   },
 };
 
+export const SolidBrightColor: Story = {
+  args: {
+    color: "#ff4444",
+  },
+};
+
+export const OutlineBrightColor: Story = {
+  args: {
+    variant: "outline",
+    color: "#ff4444",
+  },
+};
+
+export const TextBrightColor: Story = {
+  args: {
+    variant: "text",
+    color: "#ff4444",
+  },
+};
+
 export const Small: Story = {
   args: {
     size: "small",

@@ -1,42 +1,22 @@
 import React, { ReactNode } from "react";
 import chroma from "chroma-js";
 import { DEFAULT_COLOR } from "../../shared/constants";
-import { Radius, getBorderRadiusPixels } from "../../shared/radius";
-import { TextSize, getTextSize } from "../../shared/text-size";
+import { Radius, getRadiusPixels } from "../../shared/radius";
+import { getTextSize } from "../../shared/text-size";
+import { getPaddingPixels } from "../../shared/padding";
+import { Size } from "../../shared/types";
 
 export interface ButtonProps {
   children?: ReactNode;
   startContent?: ReactNode;
   endContent?: ReactNode;
   color?: string;
-  size?: TextSize;
+  size?: Size;
   radius?: Radius;
   variant?: "solid" | "outline" | "text";
   style?: React.CSSProperties;
   isIcon?: boolean;
   onClick?: () => void;
-}
-
-function getPaddingPixels(size: ButtonProps["size"], isIcon: ButtonProps["isIcon"]) {
-  if (isIcon) {
-    switch (size) {
-      case "small":
-        return "8px";
-      case "large":
-        return "16px";
-      default:
-        return "12px";
-    }
-  }
-
-  switch (size) {
-    case "small":
-      return "8px 16px";
-    case "large":
-      return "16px 32px";
-    default:
-      return "12px 24px";
-  }
 }
 
 function getButtonBackground(
@@ -151,7 +131,7 @@ const Button = ({
         alignItems: "center",
         gap: "8px",
         padding: getPaddingPixels(size, isIcon),
-        borderRadius: getBorderRadiusPixels(radius),
+        borderRadius: getRadiusPixels(radius),
         background: getButtonBackground(variant, color),
         color: getTextColor(variant, color),
         border: getButtonBorder(variant, color),

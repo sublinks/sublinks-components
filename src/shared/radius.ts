@@ -6,7 +6,7 @@ const RADIUS_MEDIUM = "12px";
 const RADIUS_LARGE = "16px";
 const RADIUS_FULL = "9999px";
 
-export function getBorderRadiusPixels(radius: Radius) {
+export function getRadiusPixels(radius: Radius) {
   switch (radius) {
     case "none":
       return RADIUS_NONE;

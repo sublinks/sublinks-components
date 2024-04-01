@@ -1,28 +1,19 @@
 import React, { ReactNode } from "react";
 import chroma from "chroma-js";
 import { DEFAULT_COLOR } from "../../shared/constants";
-import { Radius, getBorderRadiusPixels } from "../../shared/radius";
-import { TextSize, getTextSize } from "../../shared/text-size";
+import { Radius, getRadiusPixels } from "../../shared/radius";
+import { getTextSize } from "../../shared/text-size";
+import { Size } from "../../shared/types";
+import { getPaddingPixels } from "../../shared/padding";
 
 export interface ChipProps {
   children?: ReactNode;
   startContent?: ReactNode;
   endContent?: ReactNode;
-  size?: TextSize;
+  size?: Size;
   radius?: Radius;
   color?: string;
   variant?: "solid" | "outline";
-}
-
-function getPaddingPixels (size: ChipProps["size"]) {
-  switch (size) {
-    case "small":
-      return "8px";
-    case "large":
-      return "16px";
-    default:
-      return "12px";
-  }
 }
 
 function getBackgroundColor(color: ChipProps["color"], variant: ChipProps["variant"]) {
@@ -65,7 +56,7 @@ const Chip = ({ children, size = "medium", radius = "full", color = DEFAULT_COLO
         display: "inline-flex",
         alignItems: "center",
         padding: getPaddingPixels(size),
-        borderRadius: getBorderRadiusPixels(radius),
+        borderRadius: getRadiusPixels(radius),
         backgroundColor: getBackgroundColor(color, variant),
         border: getBorder(color, variant),
         color: getTextColor(color, variant),
