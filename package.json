@@ -21,7 +21,7 @@
     "@rollup/plugin-typescript": "^11.1.6",
     "@storybook/addon-a11y": "^8.0.5",
     "@storybook/addon-essentials": "^8.0.5",
-    "@storybook/addon-interactions": "^8.0.5",
+    "@storybook/addon-interactions": "^8.1.5",
     "@storybook/addon-links": "^8.0.5",
     "@storybook/addon-onboarding": "^8.0.5",
     "@storybook/addon-webpack5-compiler-swc": "^1.0.2",
